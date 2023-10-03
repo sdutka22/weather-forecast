@@ -22,7 +22,6 @@ const getWeatherData = async (startDate, endDate) => {
       "sunset",
       "uv_index_max",
       "uv_index_clear_sky_max",
-      
     ];
   
     const hourlyQuery = hourlyVariables.join(",");

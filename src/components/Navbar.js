@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Hidden, IconButton, Drawer, List, ListItem } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Hidden, IconButton, Drawer, createTheme, ThemeProvider,  List, ListItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faHome, faCircleInfo, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+
+const theme = createTheme({
+    typography: {
+      fontFamily: ['Gantari', 'sans-serif'].join(','),
+    },
+});
 
 const StyledAppBar = styled(AppBar)({ 
   backgroundColor: '#252C44', 
@@ -14,15 +20,15 @@ const StyledAppBar = styled(AppBar)({
 const StyledToolbar = styled(Toolbar)({ 
   display: 'flex', 
   justifyContent: 'space-between',
-  alignItems: 'center', // Wyśrodkuj elementy w pionie
-  height: '100%', // Zajmij całą dostępną wysokość
+  alignItems: 'center',
+  height: '100%',
 });
 
 const StyledTypography = styled(Typography)({ flexGrow: 1 });
 
 const StyledDrawer = styled(Drawer)({
   '& .MuiDrawer-paper': {
-    width: '250px',
+    width: '300px',
     backgroundColor: 'rgba(255, 255, 255)',
   },
 });
@@ -32,10 +38,14 @@ const Navbar = () => {
 
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
-  const menuItems = ['Home', 'About', 'Contact'];
+  const menuItems = [
+    { text: 'Home', icon: faHome },
+    { text: 'About', icon: faCircleInfo },
+    { text: 'Contact', icon: faAddressBook },
+  ];
 
   return (
-    <React.Fragment>
+    <ThemeProvider theme={theme}>
       <StyledAppBar position="static">
         <StyledToolbar>
           <StyledTypography variant="h5">
@@ -43,13 +53,19 @@ const Navbar = () => {
             Weather Forecast
           </StyledTypography>
           <Hidden mdUp>
-            <IconButton size="large" edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer}>
-              {drawerOpen ? <CloseIcon /> : <MenuIcon  style={{ fontSize: '35px' }}/>}
+            <IconButton 
+              size="large" 
+              edge="end" 
+              color="inherit" 
+              aria-label="menu" 
+              onClick={toggleDrawer}
+            >
+              {drawerOpen ? <CloseIcon /> : <MenuIcon style={{ fontSize: '35px' }}/>}
             </IconButton>
           </Hidden>
           <Hidden smDown>
-            {menuItems.map((text) => (
-              <Button key={text} color="inherit">
+            {menuItems.map(({ text }) => (
+              <Button key={text} color="inherit" style={{fontSize:'20px', marginRight: '30px'}}>
                 {text}
               </Button>
             ))}
@@ -57,23 +73,23 @@ const Navbar = () => {
         </StyledToolbar>
       </StyledAppBar>
       <StyledDrawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
-        <div style={{ textAlign: 'right', padding: '8px' }}>
+        <div style={{ textAlign: 'right', padding: '15px' }}>
           <IconButton size="large" edge="end" color="inherit" aria-label="close-menu" onClick={toggleDrawer}>
-            <CloseIcon style={{ fontSize: '35px' }}/>
+            <CloseIcon style={{ fontSize: '50px' }}/>
           </IconButton>
         </div>
         <List>
-          {menuItems.map((text) => (
+          {menuItems.map(({ text, icon }) => (
             <ListItem key={text} onClick={toggleDrawer}>
-              <Button color="inherit" style={{ fontSize: '20px'}}>
-                
+              <Button color="inherit" style={{ fontSize: '25px' }}>
+                <FontAwesomeIcon icon={icon} style={{ marginLeft: '45px', marginRight: '30px'}} />
                 {text}
               </Button>
             </ListItem>
           ))}
         </List>
       </StyledDrawer>
-    </React.Fragment>
+    </ThemeProvider>
   );
 };
 

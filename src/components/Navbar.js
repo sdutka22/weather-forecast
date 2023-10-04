@@ -4,7 +4,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBolt, faHome, faCircleInfo, faAddressBook } from '@fortawesome/free-solid-svg-icons';
+import { faBolt, faHome, faCircleInfo, faAddressBook, faCalendar } from '@fortawesome/free-solid-svg-icons';
 
 const theme = createTheme({
     typography: {
@@ -42,6 +42,7 @@ const Navbar = () => {
     { text: 'Home', icon: faHome },
     { text: 'About', icon: faCircleInfo },
     { text: 'Contact', icon: faAddressBook },
+    { text: 'Date Picker', icon: faCalendar, hasBackground: true },
   ];
 
   return (
@@ -64,8 +65,8 @@ const Navbar = () => {
             </IconButton>
           </Hidden>
           <Hidden smDown>
-            {menuItems.map(({ text }) => (
-              <Button key={text} color="inherit" style={{fontSize:'20px', marginRight: '30px'}}>
+            {menuItems.map(({ text, hasBackground }) => (
+              <Button key={text} color="inherit" style={{fontSize:'20px', marginRight: '30px', backgroundColor: hasBackground ? '#D46935' : 'transparent', borderRadius: '5px' }}>
                 {text}
               </Button>
             ))}
@@ -73,7 +74,7 @@ const Navbar = () => {
         </StyledToolbar>
       </StyledAppBar>
       <StyledDrawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
-        <div style={{ textAlign: 'right', padding: '15px' }}>
+        <div style={{ textAlign: 'right', padding: '15px'}}>
           <IconButton size="large" edge="end" color="inherit" aria-label="close-menu" onClick={toggleDrawer}>
             <CloseIcon style={{ fontSize: '50px' }}/>
           </IconButton>
@@ -81,8 +82,8 @@ const Navbar = () => {
         <List>
           {menuItems.map(({ text, icon }) => (
             <ListItem key={text} onClick={toggleDrawer}>
-              <Button color="inherit" style={{ fontSize: '25px' }}>
-                <FontAwesomeIcon icon={icon} style={{ marginLeft: '45px', marginRight: '30px'}} />
+              <Button color="inherit" style={{ fontSize: '27px', marginBottom: '30px' }}>
+                <FontAwesomeIcon icon={icon} style={{ marginLeft: '15px', marginRight: '30px'}} />
                 {text}
               </Button>
             </ListItem>

@@ -1,43 +1,46 @@
-// Importy
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Tabs, Tab, Paper, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Card } from '@mui/material';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import CloudIcon from '@mui/icons-material/Cloud';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
-// Komponent WeatherTabs
 const WeatherTabs = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [hourlyData, setHourlyData] = useState([]);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = (e, newValue) => {
     setSelectedTab(newValue);
   };
 
-  // Function to generate sample hourly data
-  const generateHourlyData = () => {
-    const hourlyData = [];
-    for (let i = 0; i < 24; i++) {
-      hourlyData.push({
-        godzina: `${i}:00`,
-        temperatura: getRandomNumber(10, 30),
-        opady: getRandomNumber(0, 5),
-        szansaOpadow: getRandomNumber(0, 100),
-        zachmurzenie: getRandomNumber(0, 100),
-        cisnienie: getRandomNumber(980, 1030),
-      });
-    }
-    return hourlyData;
-  };
+  useEffect(() => {
+    getWeatherData();
+  }, []);
+
+  const getWeatherData = async () => {
+    try {
+        const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,precipitation_probability,precipitation,surface_pressure,cloudcover&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,rain_sum,showers_sum,windspeed_10m_max&timezone=Europe%2FBerlin&forecast_days=16');
+    
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
   
-  // Helper function to get a random number in a given range
-  const getRandomNumber = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
+        const hourlyForecast = data.hourly;
+  
+        console.log('Hourly Forecast Data:', hourlyForecast);
+        setHourlyData(Array.isArray(hourlyForecast) ? hourlyForecast : []);
+        console.log('Hourly Data:', hourlyData);
+  
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+    }
+  };  
 
   const tabsData = [
-    { label: 'Dzisiaj', temperature: 20, precipitation: 0, hourlyData: [] },
-    { label: 'Jutro', temperature: 25, precipitation: 8, hourlyData: [] },
-    { label: 'Pojutrze', temperature: 22, precipitation: 3, hourlyData: [] },
+    { label: 'Dzisiaj', temperature: 20, precipitation: 0 },
+    { label: 'Jutro', temperature: 25, precipitation: 8 },
+    { label: 'Pojutrze', temperature: 22, precipitation: 3 },
   ];
 
   const chooseWeatherIcon = (precipitation) => {
@@ -73,34 +76,34 @@ const WeatherTabs = () => {
           ))}
         </Tabs>
         <Box sx={{ marginTop: '20px' }}>
-          {selectedTab >= 0 && (
-            <TableContainer component={Paper} sx={{backgroundColor: '#D4D4D2'}}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Godzina</TableCell>
-                    <TableCell>Temperatura (°C)</TableCell>
-                    <TableCell>Opady (mm)</TableCell>
-                    <TableCell>Szansa opadów (%)</TableCell>
-                    <TableCell>Zachmurzenie</TableCell>
-                    <TableCell>Ciśnienie (hPa)</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {tabsData[selectedTab].hourlyData.map((hourlyData, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{hourlyData.godzina}</TableCell>
-                      <TableCell>{hourlyData.temperatura}</TableCell>
-                      <TableCell>{hourlyData.opady}</TableCell>
-                      <TableCell>{hourlyData.szansaOpadow}</TableCell>
-                      <TableCell>{hourlyData.zachmurzenie}</TableCell>
-                      <TableCell>{hourlyData.cisnienie}</TableCell>
+            {selectedTab >= 0 && (
+                <TableContainer component={Paper} sx={{ backgroundColor: '#D4D4D2' }}>
+                <Table>
+                    <TableHead>
+                    <TableRow>
+                        <TableCell>Godzina</TableCell>
+                        <TableCell>Temperatura (°C)</TableCell>
+                        <TableCell>Opady (mm)</TableCell>
+                        <TableCell>Szansa opadów (%)</TableCell>
+                        <TableCell>Zachmurzenie</TableCell>
+                        <TableCell>Ciśnienie (hPa)</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
+                    </TableHead>
+                    <TableBody>
+                        {hourlyData.map((hourlyEntry, index) => (
+                            <TableRow key={index}>
+                                {/* Adjust property names according to the actual structure of hourly data */}
+                                <TableCell>{hourlyEntry.cloudcover}</TableCell>
+                                <TableCell>{hourlyEntry.precipitation}</TableCell>
+                                <TableCell>{hourlyEntry.precipitation_probability}</TableCell>
+                                <TableCell>{hourlyEntry.temperature_2m}</TableCell>
+                                <TableCell>{new Date(hourlyEntry.timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+                </TableContainer>
+            )}
         </Box>
       </Paper>
     </Container>

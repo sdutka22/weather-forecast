@@ -146,8 +146,8 @@ const HomePage = () => {
               </Card>
             </Grid>            
           </Grid> 
+          <WeatherTabs />
       </Container>
-      <WeatherTabs />
     </Paper>
     
   );

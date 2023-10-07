@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import { Container, Typography, Paper, Grid, Card, CardContent, Box } from '@mui/material';
+import WeatherTabs from './HourlySlider';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import WavesIcon from '@mui/icons-material/Waves';
 import WbTwilightIcon from '@mui/icons-material/WbTwilight';
@@ -144,9 +145,11 @@ const HomePage = () => {
                 </CardContent>
               </Card>
             </Grid>            
-          </Grid>
+          </Grid> 
       </Container>
+      <WeatherTabs />
     </Paper>
+    
   );
 };
 

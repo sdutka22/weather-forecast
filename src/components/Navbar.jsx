@@ -61,6 +61,10 @@ const Navbar = () => {
               color="inherit"
               aria-label="menu"
               onClick={toggleDrawer}
+              sx={{
+                '&:hover': { backgroundColor: 'white' },
+                '&:active': { backgroundColor: 'white' },
+              }}
             >
               {drawerOpen ? <CloseIcon /> : <MenuIcon style={{ fontSize: '35px' }} />}
             </IconButton>
@@ -68,7 +72,17 @@ const Navbar = () => {
           <Hidden smDown>
             {menuItems.map(({ text, hasBackground, path }) => (
               <Link key={text} to={path} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <Button color="inherit" style={{ fontSize: '20px', marginRight: '30px', backgroundColor: hasBackground ? '#D46935' : 'transparent', borderRadius: '5px' }}>
+                <Button
+                  color="inherit"
+                  style={{
+                    fontSize: '20px',
+                    marginRight: '30px',
+                    backgroundColor: hasBackground ? '#D46935' : 'transparent',
+                    borderRadius: '5px',
+                    '&:hover': { backgroundColor: 'white' },
+                    '&:active': { backgroundColor: 'white' },
+                  }}
+                >
                   {text}
                 </Button>
               </Link>
@@ -86,7 +100,15 @@ const Navbar = () => {
           {menuItems.map(({ text, icon, path }) => (
             <Link key={text} to={path} style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItem onClick={toggleDrawer}>
-                <Button color="inherit" style={{ fontSize: '27px', marginBottom: '30px' }}>
+                <Button
+                  color="inherit"
+                  style={{
+                    fontSize: '27px',
+                    marginBottom: '30px',
+                    '&:hover': { backgroundColor: '#FFF' },
+                    '&:active': { backgroundColor: 'white' },
+                  }}
+                >
                   <FontAwesomeIcon icon={icon} style={{ marginLeft: '15px', marginRight: '30px' }} />
                   {text}
                 </Button>

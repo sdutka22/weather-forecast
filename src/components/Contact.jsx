@@ -73,9 +73,9 @@ const ContactPage = () => {
             top: '80px',
             right: '20px',
             zIndex: 1,
-            textAlign: 'left', // Przesunięcie tekstu na lewą stronę
-            maxWidth: '300px', // Dostosuj szerokość alertu
-            color: '#fff', // Kolor tekstu
+            textAlign: 'left',
+            maxWidth: '300px',
+            color: '#fff',
           }}
           action={
             <IconButton

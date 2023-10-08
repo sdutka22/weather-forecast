@@ -46,7 +46,7 @@ const WeatherComponent = () => {
       setWeatherData(data);
       setDailyData(data.daily);
       setHourlyData(data.hourly);
-      return data; // Zwróć dane z API
+      return data;
     } catch (error) {
       console.error('Error fetching weather data:', error);
       throw error;
@@ -98,7 +98,6 @@ const WeatherComponent = () => {
           surfacePressure: hourlyData.surface_pressure[i],
           cloudcover: hourlyData.cloudcover[i],
           formattedTime: format(forecastDate, 'yyyy-MM-dd HH:mm'),
-          // Dodaj więcej pól zgodnie z potrzebami
         });
       }
     }

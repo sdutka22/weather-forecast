@@ -16,7 +16,6 @@ const WeatherTabs = ({ Hourlydate, dailyDataByDay, onDatesUpdate }) => {
       const dayAfterTomorrowDate = new Date();
       dayAfterTomorrowDate.setDate(currentDate.getDate() + 2);
     
-      // Sprawdź, czy daty się różnią przed aktualizacją stanu
       if (
           dates[0]?.getTime() !== currentDate.getTime() ||
           dates[1]?.getTime() !== tomorrowDate.getTime() ||
@@ -95,12 +94,12 @@ const WeatherTabs = ({ Hourlydate, dailyDataByDay, onDatesUpdate }) => {
                     <Table>
                     <TableHead>
                         <TableRow>
-                        <TableCell>Timestamp</TableCell>
-                        <TableCell>Temperature (°C)</TableCell>
-                        <TableCell>Precipitation (mm)</TableCell>
-                        <TableCell>Precipitation Probability (%)</TableCell>
-                        <TableCell>Cloud Cover</TableCell>
-                        <TableCell>Surface Pressure (hPa)</TableCell>
+                          <TableCell>Timestamp</TableCell>
+                          <TableCell>Temperature (°C)</TableCell>
+                          <TableCell>Precipitation (mm)</TableCell>
+                          <TableCell>Precipitation Probability (%)</TableCell>
+                          <TableCell>Cloud Cover</TableCell>
+                          <TableCell>Surface Pressure (hPa)</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

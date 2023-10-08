@@ -1,51 +1,44 @@
 import React, { useState } from 'react';
-import { Container, Typography, Paper, Box, TextField, Button, Alert, IconButton, Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Container, Typography, Paper, Box, TextField, Button, Alert, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, useMediaQuery } from '@mui/material';
 import Navbar from './Navbar';
-import { Api } from '@mui/icons-material';
+import WeatherComponent from './WeatherComponent';
 
 const WeatherPage = () => {
   const [selectedDate, setSelectedDate] = useState(null);
-  const [hourlyDataForDates, setHourlyDataForDates] = useState(null);
-  const [dailyDataForDates, setDailyDataForDates] = useState(null);
+  const [hourlyDataForDate, setHourlyDataForDate] = useState([]);
+  const isSmallScreen = useMediaQuery('(max-width:600px)');
+
+  const { weatherData, getHourlyDataByDate } = WeatherComponent();
 
   const handleDateChange = (event) => {
     const selectedDate = event.target.value;
     setSelectedDate(selectedDate);
 
-    // Tutaj dodaj kod do pobrania prognozy pogody dla wybranej daty z API
-    // W przykładowym kodzie zakładamy, że masz funkcję getWeatherData, która zwraca prognozę dla danej daty
-    const data = getWeatherData(selectedDate);
-    setWeatherData(data);
+    const targetDate = new Date(selectedDate);
+
+    const hourlyData = getHourlyDataByDate(targetDate);
+
+    setHourlyDataForDate(hourlyData);
   };
 
-  const getWeatherData = (selectedDate) => {
-    // Tutaj symulujemy pobieranie danych z API. W rzeczywistości, użyj swojego API lub serwisu do prognozy pogody
-    // Przykładowe dane:
-    return {
-      temperature: 25,
-      humidity: 60,
-      windSpeed: 10,
-      // Dodaj inne informacje o pogodzie
-    };
-  };
-
-  const {  weatherData, getDailyDataByDate, TodayWeatherdata, getHourlyDataByDate } = WeatherComponent();
-
-  setHourlyDataForDates(hourlyDataObjects);
-  setDailyDataForDates(dailyDateObjects);
+  const formattedDate = new Date(selectedDate).toLocaleString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 
   return (
-    <Paper sx={{ minHeight: '100vh', backgroundColor: '#fff', position: 'relative' }}>
+    <Paper sx={{ minHeight: '100vh', backgroundColor: '#171717', position: 'relative' }}>
       <Navbar />
       <Container maxWidth="md" sx={{ marginTop: '50px', textAlign: 'center' }}>
-        <Typography variant="h2" sx={{ color: '#000', marginBottom: '10px', fontFamily: 'Poppins, sans-serif' }}>
+        <Typography variant="h2" sx={{ color: '#fff', marginBottom: '40px', fontFamily: 'Poppins, sans-serif' }}>
           Wybierz datę
         </Typography>
 
         <TextField
           type="date"
-          variant="outlined"
+          variant="filled"
           margin="normal"
           required
           fullWidth
@@ -53,34 +46,43 @@ const WeatherPage = () => {
             shrink: true,
           }}
           onChange={handleDateChange}
+          sx={{
+            backgroundColor: '#fff',
+            margin: '20px auto',
+            textAlign: 'center',
+          }}
         />
 
         {selectedDate && (
           <Box sx={{ marginTop: '20px' }}>
-            <Typography variant="h4" sx={{ color: '#000', marginBottom: '10px', fontFamily: 'Poppins, sans-serif' }}>
-              Prognoza pogody na {selectedDate}
+            <Typography variant={isSmallScreen ? 'h4' : 'h3'} sx={{ color: '#fff', marginTop: '30px', fontFamily: 'Poppins, sans-serif' }}>
+              Prognoza pogody na {formattedDate}
             </Typography>
 
             {weatherData ? (
-              <TableContainer component={Paper} sx={{ marginTop: '20px' }}>
+              <TableContainer component={Paper} sx={{ marginTop: '60px', overflowX: 'auto' }}>
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Pogoda</TableCell>
-                      <TableCell>Temperatura (°C)</TableCell>
-                      <TableCell>Wilgotność (%)</TableCell>
-                      <TableCell>Prędkość wiatru (m/s)</TableCell>
-                      {/* Dodaj inne kolumny */}
+                      <TableCell>Timestamp</TableCell>
+                      <TableCell>Temperature (°C)</TableCell>
+                      <TableCell>Precipitation (mm)</TableCell>
+                      <TableCell>Precipitation Probability (%)</TableCell>
+                      <TableCell>Cloud Cover</TableCell>
+                      <TableCell>Surface Pressure (hPa)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow>
-                      <TableCell>...</TableCell>
-                      <TableCell>{weatherData.temperature}</TableCell>
-                      <TableCell>{weatherData.humidity}</TableCell>
-                      <TableCell>{weatherData.windSpeed}</TableCell>
-                      {/* Dodaj inne komórki */}
-                    </TableRow>
+                    {hourlyDataForDate.map((hourlyEntry) => (
+                      <TableRow key={hourlyEntry.formattedTime}>
+                        <TableCell>{hourlyEntry.formattedTime}</TableCell>
+                        <TableCell>{hourlyEntry.temperature2m}</TableCell>
+                        <TableCell>{hourlyEntry.precipitation}</TableCell>
+                        <TableCell>{hourlyEntry.precipitationProbability}</TableCell>
+                        <TableCell>{hourlyEntry.cloudcover}</TableCell>
+                        <TableCell>{hourlyEntry.surfacePressure}</TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>

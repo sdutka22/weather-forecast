@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { isToday, isTomorrow, addDays } from 'date-fns';
+import { isToday, isTomorrow } from 'date-fns';
 import { Container, Tabs, Tab, Paper, Box, Typography, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Card } from '@mui/material';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import CloudIcon from '@mui/icons-material/Cloud';
@@ -7,7 +7,6 @@ import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
 const WeatherTabs = ({ Hourlydate, dailyDataByDay, onDatesUpdate }) => {
     const [selectedTab, setSelectedTab] = useState(0);
-    const [dates, setDates] = useState([]);
 
     useEffect(() => {
       const currentDate = new Date();
@@ -16,13 +15,8 @@ const WeatherTabs = ({ Hourlydate, dailyDataByDay, onDatesUpdate }) => {
       const dayAfterTomorrowDate = new Date();
       dayAfterTomorrowDate.setDate(currentDate.getDate() + 2);
     
-      if (
-          dates[0]?.getTime() !== currentDate.getTime() ||
-          dates[1]?.getTime() !== tomorrowDate.getTime() ||
-          dates[2]?.getTime() !== dayAfterTomorrowDate.getTime()
-      ) {
-          onDatesUpdate([currentDate, tomorrowDate, dayAfterTomorrowDate]);
-      }
+      onDatesUpdate([currentDate, tomorrowDate, dayAfterTomorrowDate]);
+
     }, []);
 
     useEffect(() => {
